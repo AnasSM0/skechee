@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Finish connecting TikTok – Skechee Publisher</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<h1>Almost done</h1>
+<p id="msg">Copy this whole address and paste it into the dashboard
+(Settings → TikTok account → <em>"After logging in, paste the full address…"</em>), then click
+<strong>Finish connecting</strong>. Do it straight away: the login code expires within minutes.</p>
+<div class="box" id="url"></div>
+<button id="copy" type="button">Copy address</button>
+<p class="muted">This page sends nothing anywhere: it only shows the address so you can copy it.</p>
+<script>
+  // Shows the full address (it contains TikTok's one-time ?code=…&state=…) so the owner can paste it into
+  // the local dashboard. Nothing is stored or sent.
+  var u = window.location.href, box = document.getElementById("url"), btn = document.getElementById("copy");
+  box.textContent = u;
+  var p = new URLSearchParams(window.location.search);
+  if (p.get("error")) {
+    document.getElementById("msg").textContent = "TikTok reported an error (" + p.get("error") +
+      "). Go back to the dashboard and click Open TikTok login again.";
+  } else if (!p.get("code")) {
+    document.getElementById("msg").textContent = "This is the TikTok redirect page for Skechee Publisher. " +
+      "It is only used during TikTok login.";
+    btn.style.display = "none";
+  }
+  btn.onclick = function () {
+    navigator.clipboard.writeText(u).then(function () { btn.textContent = "Copied ✓"; },
+      function () { btn.textContent = "Select the address above and copy it"; });
+  };
+</script>
+</body>
+</html>
